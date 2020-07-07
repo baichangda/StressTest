@@ -1,0 +1,5 @@
+dependencies {
+    //集成netty
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.50.Final'
+    compile project(':Base')
+}
