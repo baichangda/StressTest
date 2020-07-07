@@ -3,7 +3,7 @@ package com.bcd.ickey.mock;
 import com.bcd.base.exception.BaseRuntimeException;
 import com.bcd.ickey.Parser_ICKey;
 import com.bcd.ickey.data.PacketData;
-import com.bcd.ickey.data.out.VehicleData;
+import com.bcd.ickey.data.output.VehicleData;
 import com.bcd.mock.MockClientBlock;
 import com.bcd.mock.MockDataBlock;
 import com.bcd.mock.MockDataBlockGenerator;
