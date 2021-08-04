@@ -1,6 +1,5 @@
 package com.bcd.ickey.mock;
 
-import com.bcd.base.exception.BaseRuntimeException;
 import com.bcd.ickey.Parser_ICKey;
 import com.bcd.ickey.data.PacketData;
 import com.bcd.ickey.data.output.VehicleData;
@@ -10,7 +9,7 @@ import com.bcd.mock.MockDataBlockGenerator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
-import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -48,15 +47,11 @@ public class MockDataBlockGeneratorImpl implements MockDataBlockGenerator , Appl
     public ByteBuf generate(String id,Date exceptDate){
         PacketData<VehicleData> curPacketData=new PacketData<>();
         ByteBuf content= Unpooled.buffer();
-        try {
-            VehicleData curVehicleData=new VehicleData();
-            BeanUtils.copyProperties(curVehicleData,mockData.getContentBean());
-            curVehicleData.setTime(exceptDate);
-            parser.deParse(curVehicleData,content);
-            BeanUtils.copyProperties(curPacketData,mockData);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw BaseRuntimeException.getException(e);
-        }
+        VehicleData curVehicleData=new VehicleData();
+        BeanUtils.copyProperties(curVehicleData,mockData.getContentBean());
+        curVehicleData.setTime(exceptDate);
+        parser.deParse(curVehicleData,content);
+        BeanUtils.copyProperties(curPacketData,mockData);
         curPacketData.setContent(content.array());
         curPacketData.setId(id);
         ByteBuf res= Unpooled.buffer();

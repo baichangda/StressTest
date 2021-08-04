@@ -3,6 +3,7 @@ package com.bcd.ickey;
 import com.bcd.base.exception.BaseRuntimeException;
 import com.bcd.ickey.handler.PacketDataContentHandler;
 import com.bcd.ickey.handler.PacketDataHandler;
+import com.bcd.ickey.handler.PacketSplitHandler;
 import com.bcd.ickey.mock.MockProp;
 import com.bcd.mock.MockClient;
 import com.bcd.mock.MockContext;
@@ -18,7 +19,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -63,6 +63,7 @@ public class TcpClient implements ApplicationListener<ContextRefreshedEvent> {
         client.handler(new ChannelInitializer<NioSocketChannel>() {  //通道是NioSocketChannel
             @Override
             protected void initChannel(NioSocketChannel ch) throws Exception {
+                ch.pipeline().addLast(new PacketSplitHandler.Default(new byte[]{41,41},4,2));
                 ch.pipeline().addLast(new PacketDataHandler(context));
                 ch.pipeline().addLast(new PacketDataContentHandler(id,context,idToCtx));
             }

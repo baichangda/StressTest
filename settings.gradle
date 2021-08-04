@@ -1,7 +1,2 @@
 rootProject.name = 'StressTest'
-include 'Base'
-include 'NettyServer'
-include 'ICKey'
-include 'Mock'
-include 'Parser'
 

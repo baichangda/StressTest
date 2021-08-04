@@ -1,59 +1,10 @@
-apply plugin: 'org.springframework.boot'
-allprojects{
-    group 'StressTest'
-    version '1.0-SNAPSHOT'
-    apply plugin: 'java'
-    apply plugin: 'idea'
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    repositories {
-        mavenLocal()
-        maven { url "${mavenRepoUrl}" }
-        jcenter()
-        mavenCentral()
-    }
-
-    dependencies{
-
-    }
-
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked"
-            options.compilerArgs << "-parameters"
-            options.encoding = "UTF-8"
-        }
-    }
-
-    jar {
-        enabled = true
-    }
-
-
-}
-
-bootJar {
-    manifest {
-        attributes 'Start-Class': 'com.bcd.Application'
-    }
-}
-
-bootRun {
-    /**
-     * 启动时候带入jvm的参数;如下(启动jvisualvm监控)
-     * nohup gradle bootRun -PjvmArgs="-Djava.rmi.server.hostname=172.16.24.36 -Dcom.sun.management.jmxremote.port=10001 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true" &
-     */
-    if (project.hasProperty('jvmArgs') ) {
-        jvmArgs = (project.jvmArgs.split("\\s+") as List)
-    }
-}
-
 buildscript {
     ext {
-        springBootVersion = '2.3.1.RELEASE'
-        mavenRepoUrl='http://maven.aliyun.com/nexus/content/groups/public/'
+        springBootVersion='+'
+        disruptorVersion = '+'
+        lombokVersion = "+"
+        nettyVersion = '4.+'
+        mavenRepoUrl = 'https://maven.aliyun.com/repository/central'
     }
     repositories {
         mavenLocal()
@@ -65,9 +16,87 @@ buildscript {
         //使用springboot框架
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
-
 }
 
-dependencies {
-    compile project(':ICKey')
+group 'StressTest'
+version '1.0-SNAPSHOT'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven { url "${mavenRepoUrl}" }
+    jcenter()
+    mavenCentral()
+}
+
+//去除springboot默认的logback
+configurations.all {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    exclude module: 'logback-classic'
+    exclude module: 'logback-core'
+}
+
+dependencies{
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombokVersion}"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombokVersion}"
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/annotations
+    implementation group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1'
+
+    //springboot支持
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
+
+    implementation group: 'io.netty', name: 'netty-all', version: "${nettyVersion}"
+
+    //springboot log4j2支持
+    implementation('org.springframework.boot:spring-boot-starter-log4j2')
+    //disruptor(log4j2异步日志需要用到)
+    implementation group: 'com.lmax', name: 'disruptor', version: "${disruptorVersion}"
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked"
+        options.compilerArgs << "-parameters"
+        options.encoding = "UTF-8"
+    }
+}
+
+jar {
+    enabled = true
+}
+
+/**
+ * SpringBoot 2开始,使用gradle bootJar进行打包,并要配置入口类
+ */
+bootJar {
+    manifest {
+        attributes 'Start-Class': 'com.bcd.Application'
+    }
+}
+
+/**
+ * ----------------------------------------------------------------------------
+ */
+bootRun {
+    /**
+     * 启动时候带入jvm的参数;如下(启动jvisualvm监控)
+     * nohup gradle bootRun -PjvmArgs="-Djava.rmi.server.hostname=172.16.24.36 -Dcom.sun.management.jmxremote.port=10001 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true" &
+     */
+
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs.addAll(project.jvmArgs.split("\\s+") as List)
+    }
+    //开启缓存行补齐
+    jvmArgs('-XX:-RestrictContended')
+    jvmArgs('-Dfile.encoding=UTF-8')
+    //log4j2全局异步日志
+    jvmArgs('-DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector')
 }

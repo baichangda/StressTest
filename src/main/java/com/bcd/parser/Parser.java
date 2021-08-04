@@ -2,7 +2,7 @@ package com.bcd.parser;
 
 import com.bcd.parser.anno.PacketField;
 import com.bcd.parser.anno.Parsable;
-import com.bcd.parser.exception.BaseRuntimeException;
+import com.bcd.base.exception.BaseRuntimeException;
 import com.bcd.parser.info.FieldInfo;
 import com.bcd.parser.info.PacketInfo;
 import com.bcd.parser.processer.FieldDeProcessContext;

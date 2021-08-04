@@ -1,7 +1,7 @@
 package com.bcd.parser.util;
 
 
-import com.bcd.parser.exception.BaseRuntimeException;
+import com.bcd.base.exception.BaseRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -2,7 +2,7 @@ package com.bcd.parser.processer;
 
 
 import com.bcd.parser.Parser;
-import com.bcd.parser.exception.BaseRuntimeException;
+import com.bcd.base.exception.BaseRuntimeException;
 import com.bcd.parser.info.FieldInfo;
 import com.bcd.parser.info.PacketInfo;
 import io.netty.buffer.ByteBuf;

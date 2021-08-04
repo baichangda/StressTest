@@ -27,7 +27,7 @@ public class CommonContentHandler extends ContentHandler {
     public void handle(PacketData data, ChannelHandlerContext ctx) {
         //构造通用响应
         ByteBuf byteBuf= Unpooled.buffer(7,7);
-        LocalDateTime ldt= LocalDateTime.ofInstant(new Date().toInstant(),DateZoneUtil.ZONE_ID);
+        LocalDateTime ldt= LocalDateTime.ofInstant(new Date().toInstant(),DateZoneUtil.ZONE_OFFSET);
         byteBuf.writeByte(ldt.getYear()/100);
         byteBuf.writeByte(ldt.getYear()%100);
         byteBuf.writeByte(ldt.getMonthValue());
