@@ -1,4 +1,4 @@
-package com.bcd.ickey.handler.impl;
+package com.bcd.ickey.handler;
 
 import com.bcd.ickey.data.PacketData;
 import io.netty.channel.ChannelHandlerContext;

@@ -50,7 +50,7 @@ public class MockDataScheduler{
                 queue.put(SendData.EMPTY);
             }else{
                 Date date=new Date();
-                MockDataBlock dataBlock= mockDataBlockGenerator.generate(mockClientBlocks[curIndex],date,new Date(date.getTime()+taskDelayDiff*1000));
+                MockDataBlock dataBlock= mockDataBlockGenerator.generate(mockClientBlocks[curIndex],date,new Date(date.getTime()+taskDelayDiff* 1000L));
                 queue.put(new SendData(mockClientBlocks[curIndex],dataBlock));
                 if(monitor) {
                     generateNum.addAndGet(dataBlock.getData().length);

@@ -40,7 +40,7 @@ public class MockDataBlockGeneratorImpl implements MockDataBlockGenerator , Appl
     public MockDataBlock generate(MockClientBlock clientBlock, Date currentDate,Date exceptDate) {
         ByteBuf[] data = Arrays.stream(clientBlock.getClients()).map(e -> {
             return generate(e.getId(),exceptDate);
-        }).toArray(len -> new ByteBuf[len]);
+        }).toArray(ByteBuf[]::new);
         return new MockDataBlock(clientBlock.getIndex(),data);
     }
 

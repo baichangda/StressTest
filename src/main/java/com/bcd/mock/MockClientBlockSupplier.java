@@ -15,6 +15,10 @@ public class MockClientBlockSupplier{
         this.clients = clients;
     }
 
+    /**
+     * 将客户端按照 period 均匀分割、尽量保证每秒发送的数据是一样的
+     * @return
+     */
     public MockClientBlock [] get(){
         MockClientBlock[] blocks=new MockClientBlock[period];
         if(clients.length<=period){

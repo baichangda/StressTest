@@ -1,4 +1,4 @@
-package com.bcd.ickey.handler.impl;
+package com.bcd.ickey.handler;
 
 import com.bcd.base.util.DateZoneUtil;
 import com.bcd.ickey.Parser_ICKey;
