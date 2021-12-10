@@ -63,9 +63,7 @@ public class MockDataScheduler{
 
     public void init(){
         startMonitor();
-        mockDataBlockPool.scheduleAtFixedRate(()->{
-            generateMockDataBlockAndOffer();
-        },3,1, TimeUnit.SECONDS);
+        mockDataBlockPool.scheduleAtFixedRate(this::generateMockDataBlockAndOffer,3,1, TimeUnit.SECONDS);
         sendPool.scheduleAtFixedRate(()->{
             SendData data= queue.poll();
             if(data!=SendData.EMPTY){
